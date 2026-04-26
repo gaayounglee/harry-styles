@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harry Styles — Albums</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── CSS Variables ── */
+    :root {
+      --bg: #f5f0eb;
+      --green-light: #e6eedf;
+      --green-mid: #c8dbb9;
+      --ink: #1a1a18;
+      --muted: #7a7a72;
+      --accent: #4a7c59;
+      --white: #ffffff;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      padding: 1.1rem 2rem;
+      background: rgba(245, 240, 235, 0.88);
+      backdrop-filter: blur(10px);
+      letter-spacing: 0.12em;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: var(--ink);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      background: var(--green-light);
+      padding: 6rem 8vw 4rem;
+      gap: 3rem;
+    }
+
+    .hero-text { animation: fadeUp 0.9s ease both; }
+
+    .hero-text h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1.15;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-text h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .bio-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 2rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .bio-list li::before { content: '•'; margin-right: 6px; }
+
+    .pill-btn {
+      display: inline-block;
+      padding: 0.55rem 1.4rem;
+      border: 1px solid var(--green-mid);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: var(--ink);
+      transition: background 0.2s, color 0.2s;
+    }
+    .pill-btn:hover { background: var(--accent); color: var(--white); border-color: var(--accent); }
+
+    .hero-img-wrap {
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+
+    .hero-img-wrap img {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 4px;
+      display: block;
+      object-fit: cover;
+      aspect-ratio: 3/4;
+      /* placeholder gradient instead of real image */
+    }
+
+    .hero-placeholder {
+      width: 100%;
+      max-width: 480px;
+      aspect-ratio: 3/4;
+      border-radius: 4px;
+      background: linear-gradient(145deg, #d5e6c5 0%, #b8d4a0 50%, #9ec88a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-placeholder::after {
+      content: 'HS';
+      position: absolute;
+      font-size: 8rem;
+      font-family: var(--serif);
+      font-style: italic;
+      color: rgba(255,255,255,0.3);
+      right: 1rem;
+      bottom: 0;
+      line-height: 1;
+    }
+
+    .img-caption {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      text-align: right;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+    }
+
+    /* ── ALBUMS — alternating layout ── */
+    #albums { background: var(--white); }
+
+    .album-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 0;
+      border-top: 1px solid #e0dbd4;
+    }
+
+    .album-block:nth-child(even) { direction: rtl; }
+    .album-block:nth-child(even) > * { direction: ltr; }
+
+    .album-cover {
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+
+    .album-cover-fill {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.5rem;
+      color: rgba(255,255,255,0.7);
+      position: relative;
+    }
+
+    .album-cover-fill.hs { background: linear-gradient(135deg, #2b2b2b, #555); }
+    .album-cover-fill.fl { background: linear-gradient(135deg, #e8c4c4, #c97c7c, #a0463d); }
+    .album-cover-fill.hh { background: linear-gradient(135deg, #d6e8c2, #9bc47a, #5e9b38); }
+
+    .cover-label {
+      position: absolute;
+      bottom: 1rem; right: 1rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .album-info {
+      padding: 3.5rem 4vw;
+      background: var(--green-light);
+    }
+
+    .album-block:nth-child(odd) .album-info { background: var(--white); }
+
+    .album-year {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .album-title {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      margin-bottom: 1rem;
+    }
+
+    .album-desc {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.75;
+      margin-bottom: 1.6rem;
+    }
+
+    .track-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .chip {
+      font-size: 0.72rem;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid var(--green-mid);
+      border-radius: 999px;
+      color: var(--muted);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--ink);
+      color: var(--white);
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+
+    #contact h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      margin-bottom: 1rem;
+    }
+
+    #contact p {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.25);
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.75rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      #hero { grid-template-columns: 1fr; min-height: auto; padding-top: 5rem; }
+      .album-block, .album-block:nth-child(even) { grid-template-columns: 1fr; direction: ltr; }
+      .album-cover { aspect-ratio: 16/9; }
+      nav { gap: 1.2rem; font-size: 0.68rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="https://open.spotify.com/artist/6KImCVD70vtIoJWnq6nGn3?si=LCfRlDydRXa6LjtkPB79mA" target="_blank">ALBUMS</a>
+    <a href="https://www.instagram.com/harrystyles" target="_blank">CONTACT</a>
+  </nav>
+
+  <!-- ① HERO -->
+  <section id="hero">
+    <div class="hero-text">
+      <h1>Hi, there!<br/>It's <em>Harry</em> Styles.</h1>
+      <ul class="bio-list">
+        <li>Singer-Songwriter &amp; Style Icon</li>
+        <li>Born February 1, 1994 in Holmes Chapel, UK</li>
+        <li>3 Solo Studio Albums (2017 – 2022)</li>
+        <li>Grammy Award Winner · Billboard Hot 100 #1</li>
+        <li>Former Member of One Direction</li>
+      </ul>
+    </div>
+
+    <div class="hero-img-wrap">
+      <img src="images/harry.jpg" alt="Harry Styles" style="width:100%; max-width:480px; aspect-ratio:3/4; object-fit:cover; border-radius:4px; display:block;">
+    </div>
+  </section>
+
+  <!-- ② ALBUMS -->
+  <section id="albums">
+    <!-- Album 1 -->
+    <div class="album-block reveal">
+      <div class="album-cover">
+        <img src="images/album1.jpg" alt="Harry Styles Album" style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+      <div class="album-info">
+        <p class="album-year">May 12, 2017 · Debut Album</p>
+        <h3 class="album-title">Harry Styles</h3>
+        <p class="album-desc">
+          데뷔 솔로 앨범. 원 디렉션 시절과는 완전히 다른, 70년대 록에 영향을 받은 묵직하고 감성적인 사운드를 선보였습니다. 영국 차트 1위를 기록하며 솔로 아티스트로서의 강렬한 등장을 알렸습니다.
+        </p>
+        <a class="pill-btn" href="https://open.spotify.com/album/1FZKIm3JVDCxTchXDo5jOV?si=5QWxHVzxRv-0ueFJL01B5Q" target="_blank">read more</a>
+      </div>
+    </div>
+
+    <!-- Album 2 -->
+    <div class="album-block reveal">
+      <div class="album-cover">
+        <img src="images/album2.jpg" alt="Fine Line Album" style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+      <div class="album-info">
+        <p class="album-year">December 13, 2019 · Second Album</p>
+        <h3 class="album-title">Fine Line</h3>
+        <p class="album-desc">
+          팝 록, 사이키델릭 팝, 포크, 소울이 어우러진 두 번째 앨범. 이별, 행복, 슬픔을 주제로 한 진솔한 가사가 담겨 있으며, 'Watermelon Sugar'로 그래미 어워드를 수상했습니다. 미국 빌보드 200 1위를 기록했습니다.
+        </p>
+        <a class="pill-btn" href="https://open.spotify.com/album/7xV2TzoaVc0ycW7fwBwAml?si=eMxJKXHjTem0iVNZHlpFdQ" target="_blank">read more</a>
+      </div>
+    </div>
+
+    <!-- Album 3 -->
+    <div class="album-block reveal">
+      <div class="album-cover">
+        <img src="images/album3.jpg" alt="Harry's House Album" style="width:100%; height:100%; object-fit:cover; display:block;">
+      </div>
+      <div class="album-info">
+        <p class="album-year">May 20, 2022 · Third Album</p>
+        <h3 class="album-title">Harry's House</h3>
+        <p class="album-desc">
+          신스팝과 펑크가 어우러진 밝고 경쾌한 세 번째 앨범. Joni Mitchell의 앨범에서 영감을 받아 '집'이라는 개념을 음악으로 표현했습니다. 리드 싱글 'As It Was'는 2022년 영국 최다 스트리밍 곡이 되었습니다.
+        </p>
+        <a class="pill-btn" href="https://open.spotify.com/album/5r36AJ6VOJtp00oxSkBZ5h?si=yUHrgOQMTRKNUic-76Zzyw" target="_blank">read more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ CONTACT -->
+  <section id="contact">
+    <h2>Any Question? Please contact me.</h2>
+    <p>2026109224@hycu.ac.kr</p>
+    <p>Designed by Web Design Class</p>
+  </section>
+
+  <footer>
+    © 2026 Harry Styles Fan Page.
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
